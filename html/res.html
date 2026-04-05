@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Résolution d’un système linéaire</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: rgb(223, 223, 239);
+    }
+    textarea {
+      width: 260px;
+      height: 120px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      margin-top: 15px;
+      font-size: 16px;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Résolution d’un système d’équations linéaires</h1>
+
+<p>
+Entrez la matrice des coefficients <strong>A</strong> et le vecteur des constantes <strong>B</strong>.<br>
+Les valeurs sont séparées par des espaces.
+</p>
+
+<h3>Matrice A (coefficients)</h3>
+<textarea id="matA">1 1
+2 -1</textarea>
+
+<h3>Vecteur B (constantes)</h3>
+<textarea id="vectB">5
+1</textarea>
+
+<br>
+<button onclick="resoudre()">Résoudre le système</button>
+
+<h3>Solution</h3>
+<pre id="resultat"></pre>
+
+<script>
+  function lireMatrice(texte) {
+    return texte.trim().split("\n").map(ligne =>
+      ligne.trim().split(/\s+/).map(Number)
+    );
+  }
+
+  function resoudreSysteme(A, B) {
+    const n = A.length;
+    let M = A.map((ligne, i) => [...ligne, B[i]]);
+
+    for (let i = 0; i < n; i++) {
+      let pivot = M[i][i];
+
+      if (pivot === 0) {
+        for (let k = i + 1; k < n; k++) {
+          if (M[k][i] !== 0) {
+            [M[i], M[k]] = [M[k], M[i]];
+            pivot = M[i][i];
+            break;
+          }
+        }
+      }
+
+      if (pivot === 0) {
+        return null; // pas de solution unique
+      }
+
+      for (let j = i; j <= n; j++) {
+        M[i][j] /= pivot;
+      }
+
+      for (let k = 0; k < n; k++) {
+        if (k !== i) {
+          let facteur = M[k][i];
+          for (let j = i; j <= n; j++) {
+            M[k][j] -= facteur * M[i][j];
+          }
+        }
+      }
+    }
+
+    return M.map(ligne => ligne[n]);
+  }
+
+  function resoudre() {
+    const output = document.getElementById("resultat");
+    try {
+      const A = lireMatrice(document.getElementById("matA").value);
+      const B = lireMatrice(document.getElementById("vectB").value);
+
+      if (A.length !== B.length)
+        throw "Le nombre d’équations doit correspondre aux constantes.";
+
+      const solution = resoudreSysteme(A, B);
+
+      if (!solution)
+        throw "Le système n’admet pas de solution unique.";
+
+      let texte = solution
+        .map((val, i) => `x${i + 1} = ${val.toFixed(3)}`)
+        .join("\n");
+
+      output.className = "";
+      output.textContent = texte;
+
+    } catch (err) {
+      output.className = "error";
+      output.textContent = "Erreur : " + err;
+    }
+  }
+</script>
+
+</body>
+</html>

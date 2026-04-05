@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Opérations sur matrices</title>
+  <link rel="stylesheet" href="/css/styles.css">
+    <!-- Équation mathématique -->
+  <script src='/js/script.js'></script>
+</head>
+<body>
+
+<h1>Opérations sur deux matrices</h1>
+
+<p>
+Entrez les matrices ligne par ligne.<br>
+Les valeurs doivent être séparées par des espaces.
+</p>
+
+<div class="container">
+  <div>
+    <h3>Matrice A</h3>
+    <textarea id="matrixA">1 2
+3 4</textarea>
+  </div>
+
+  <div>
+    <h3>Matrice B</h3>
+    <textarea id="matrixB">5 6
+7 8</textarea>
+  </div>
+</div>
+
+<div>
+  <button onclick="calculer('add')">Addition</button>
+  <button onclick="calculer('sub')">Soustraction</button>
+  <button onclick="calculer('mul')">Multiplication</button>
+</div>
+
+<h3>Résultat</h3>
+<pre id="resultat"></pre>
+
+</body>
+</html>

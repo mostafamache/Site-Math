@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
- <meta charset="UTF-8">
- <title>Calcul du déterminant</title>
- <link rel="stylesheet" href="/css/styles.css">
- <script src='/js/script.js'></script>
+  <meta charset="UTF-8">
+  <title>Opérations sur matrices</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src='/js/script.js'></script>
 </head>
 
+
 <body>
-<h1>Calcul du déterminant d'une matrice</h1>
+
+<h2>Calcul du déterminant d’une matrice carrée</h2>
+
+
 <label>
-  Ordre de la matrice n :
-  <input type="number" id="size" value="3" min="1">
+    Dimension \( n \) :
+    <input type="number" id="dimension" min="1" value="2">
 </label>
-<button onclick="createMatrix()">Créer la matrice</button>
+<button onclick="creerMatrice()">Créer la matrice</button>
 
-<div id="matrix"></div>
+<div id="matrice"></div>
 
-<button onclick="computeDeterminant()">Calculer le déterminant</button>
+<button onclick="calculerDeterminant()">Calculer le déterminant</button>
 
-<div id="result"></div>
+<div id="resultat"></div>
+
+
 
 </body>
 </html>

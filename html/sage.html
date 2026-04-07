@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Bloc Sage</title>
+
+    <!-- Chargement de SageCell -->
+    <script src="https://sagecell.sagemath.org/static/embedded_sagecell.js"></script>
+    <script>
+        sagecell.makeSagecell({
+            inputLocation: ".sage",
+            autoeval: false
+        });
+    </script>
+</head>
+<body>
+
+<h3>Calcul avec Sage</h3>
+
+<div class="sage">
+<script type="text/x-sage">
+A = matrix([[1,2],[3,4]])
+det(A)
+</script>
+</div>
+
+</body>
+</html>

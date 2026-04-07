@@ -80,93 +80,78 @@
   }
 
 /*déterminant d'une matrice */
+// Calcul du déterminant par la méthode de Gauss
 
- function createMatrix() {
-  const n = parseInt(document.getElementById("size").value);
-  if (n <= 0) {
-    alert("Veuillez entrer un entier positif");
-    return;
-  }
+function creerMatrice() {
+    const n = parseInt(document.getElementById("dimension").value);
+    const container = document.getElementById("matrice");
+    container.innerHTML = "";
 
-  const container = document.getElementById("matrix");
-  container.innerHTML = "";
+    const table = document.createElement("table");
 
-  const table = document.createElement("table");
-
-  for (let i = 0; i < n; i++) {
-    const row = document.createElement("tr");
-    for (let j = 0; j < n; j++) {
-      const cell = document.createElement("td");
-      const input = document.createElement("input");
-      input.type = "number";
-      input.step = "any";
-      cell.appendChild(input);
-      row.appendChild(cell);
-    }
-    table.appendChild(row);
-  }
-
-  container.appendChild(table);
- }
-
-// Calcul du déterminant par élimination de Gauss
- function determinant(A) {
-  const n = A.length;
-  let det = 1;
-
-  // Copie de la matrice
-  let M = A.map(row => row.slice());
-
-  for (let i = 0; i < n; i++) {
-    // Recherche pivot
-    let pivot = i;
-    while (pivot < n && M[pivot][i] === 0) pivot++;
-
-    if (pivot === n) return 0;
-
-    if (pivot !== i) {
-      [M[i], M[pivot]] = [M[pivot], M[i]];
-      det *= -1;
-    }
-
-    det *= M[i][i];
-
-    for (let j = i + 1; j < n; j++) {
-      let factor = M[j][i] / M[i][i];
-      for (let k = i; k < n; k++) {
-        M[j][k] -= factor * M[i][k];
-      }
-    }
-  }
-
-  return det;
- }
- function computeDeterminant() {
-  const table = document.querySelector("#matrix table");
-  if (!table) return;
-
-  const n = table.rows.length;
-  let matrix = [];
-
-  try {
     for (let i = 0; i < n; i++) {
-      matrix[i] = [];
-      for (let j = 0; j < n; j++) {
-        const value = table.rows[i].cells[j].firstChild.value;
-        if (value === "") throw "Toutes les cases doivent être remplies";
-        matrix[i][j] = parseFloat(value);
-      }
+        const row = document.createElement("tr");
+        for (let j = 0; j < n; j++) {
+            const cell = document.createElement("td");
+            const input = document.createElement("input");
+            input.type = "number";
+            input.step = "any";
+            input.value = 0;
+            input.id = `a_${i}_${j}`;
+            cell.appendChild(input);
+            row.appendChild(cell);
+        }
+        table.appendChild(row);
     }
 
-    const det = determinant(matrix);
-    document.getElementById("result").textContent =
-      "Résultat : det(A) = " + det.toPrecision(2);
+    container.appendChild(table);
+}
 
-  } catch (e) {
-    alert("Erreur : " + e);
-  }
- }
- 
+function lireMatrice() {
+    const n = parseInt(document.getElementById("dimension").value);
+    const M = [];
+
+    for (let i = 0; i < n; i++) {
+        M[i] = [];
+        for (let j = 0; j < n; j++) {
+            const val = parseFloat(document.getElementById(`a_${i}_${j}`).value);
+            M[i][j] = isNaN(val) ? 0 : val;
+        }
+    }
+    return M;
+}
+
+function determinant(M) {
+    const n = M.length;
+
+    if (n === 1) return M[0][0];
+    if (n === 2) return M[0][0]*M[1][1] - M[0][1]*M[1][0];
+
+    let det = 0;
+    for (let j = 0; j < n; j++) {
+        det += ((j % 2 === 0 ? 1 : -1) * M[0][j] * determinant(mineur(M, 0, j)));
+    }
+    return det;
+}
+
+function mineur(M, row, col) {
+    return M
+        .filter((_, i) => i !== row)
+        .map(r => r.filter((_, j) => j !== col));
+}
+
+function calculerDeterminant() {
+    const M = lireMatrice();
+    const det = determinant(M);
+    document.getElementById("resultat").innerText =
+        "Déterminant = " + det;
+}
+
+// création initiale
+creerMatrice();
+
+
+
 // Résolution de systèmes linéaires par la méthode de Gauss
 
 
@@ -232,12 +217,6 @@ function resoudreSEL() {
 //Méthode su simplexe pour l'optimisation linéaire
 function lireVecteur(txt) {
   return txt.trim().split(/\s+/).map(Number);
-}
-
-function lireMatrice(txt) {
-  return txt.trim().split("\n").map(l =>
-    l.trim().split(/\s+/).map(Number)
-  );
 }
 
 function simplex(c, A, b) {

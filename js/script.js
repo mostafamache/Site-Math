@@ -1,5 +1,6 @@
 /* Place your JavaScript in this file */
-/*Opérations sur les matrices*/
+
+//Opérations sur les matrices
   function lireMatrice(texte) {
     return texte.trim().split("\n").map(ligne =>
       ligne.trim().split(/\s+/).map(Number)
@@ -79,82 +80,93 @@
     }
   }
 
-/*déterminant d'une matrice */
-// Calcul du déterminant par la méthode de Gauss
+//calcul de déterminant 
 
-function creerMatrice() {
-    const n = parseInt(document.getElementById("dimension").value);
-    const container = document.getElementById("matrice");
-    container.innerHTML = "";
+ // Génère la grille d'inputs
+  function genererMatrice() {
+    const n = Number(document.getElementById("size").value);
+    const matrixDiv = document.getElementById("matrix");
+    matrixDiv.innerHTML = "";
+    matrixDiv.style.gridTemplateColumns = `repeat(${n}, 1fr)`;
 
-    const table = document.createElement("table");
-
-    for (let i = 0; i < n; i++) {
-        const row = document.createElement("tr");
-        for (let j = 0; j < n; j++) {
-            const cell = document.createElement("td");
-            const input = document.createElement("input");
-            input.type = "number";
-            input.step = "any";
-            input.value = 0;
-            input.id = `a_${i}_${j}`;
-            cell.appendChild(input);
-            row.appendChild(cell);
-        }
-        table.appendChild(row);
+    for (let i = 0; i < n * n; i++) {
+      const input = document.createElement("input");
+      input.type = "number";
+      input.value = 0;
+      matrixDiv.appendChild(input);
     }
+  }
 
-    container.appendChild(table);
-}
-
-function lireMatrice() {
-    const n = parseInt(document.getElementById("dimension").value);
-    const M = [];
+  // Lecture de la matrice
+  function lireMatrice(n) {
+    const inputs = document.querySelectorAll("#matrix input");
+    let M = [];
+    let index = 0;
 
     for (let i = 0; i < n; i++) {
-        M[i] = [];
-        for (let j = 0; j < n; j++) {
-            const val = parseFloat(document.getElementById(`a_${i}_${j}`).value);
-            M[i][j] = isNaN(val) ? 0 : val;
-        }
+      let ligne = [];
+      for (let j = 0; j < n; j++) {
+        ligne.push(Number(inputs[index++].value));
+      }
+      M.push(ligne);
     }
     return M;
-}
+  }
 
-function determinant(M) {
+  // Calcul du déterminant (Gauss)
+  function determinant(M) {
     const n = M.length;
+    let A = M.map(row => row.slice());
+    let det = 1;
 
-    if (n === 1) return M[0][0];
-    if (n === 2) return M[0][0]*M[1][1] - M[0][1]*M[1][0];
+    for (let i = 0; i < n; i++) {
+      let pivot = A[i][i];
 
-    let det = 0;
-    for (let j = 0; j < n; j++) {
-        det += ((j % 2 === 0 ? 1 : -1) * M[0][j] * determinant(mineur(M, 0, j)));
+      if (pivot === 0) {
+        let found = false;
+        for (let j = i + 1; j < n; j++) {
+          if (A[j][i] !== 0) {
+            [A[i], A[j]] = [A[j], A[i]];
+            det *= -1;
+            pivot = A[i][i];
+            found = true;
+            break;
+          }
+        }
+        if (!found) return 0;
+      }
+
+      det *= pivot;
+      for (let j = i + 1; j < n; j++) {
+        let factor = A[j][i] / pivot;
+        for (let k = i; k < n; k++) {
+          A[j][k] -= factor * A[i][k];
+        }
+      }
     }
     return det;
-}
+  }
 
-function mineur(M, row, col) {
-    return M
-        .filter((_, i) => i !== row)
-        .map(r => r.filter((_, j) => j !== col));
-}
+  function calculerDeterminant() {
+    const n = Number(document.getElementById("size").value);
+    const M = lireMatrice(n);
+    const d = determinant(M);
+    document.getElementById("det").textContent =
+      "Déterminant = " + d;
+  }
 
-function calculerDeterminant() {
-    const M = lireMatrice();
-    const det = determinant(M);
-    document.getElementById("resultat").innerText =
-        "Déterminant = " + det;
-}
+  // Remise à zéro
+  
+function resetMatrice() {
+    const inputs = document.querySelectorAll("#matrix input");
+    inputs.forEach(input => input.value = 0);
+    document.getElementById("det").textContent = "";
+  }
 
-// création initiale
-creerMatrice();
-
-
+  // Génération initiale
+  genererMatrice();
 
 // Résolution de systèmes linéaires par la méthode de Gauss
-
-
 function creerTableau() {
     let n = Number(document.getElementById("n").value);
     let html = "<h3>Coefficients</h3><table>";

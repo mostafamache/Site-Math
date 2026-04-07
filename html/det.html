@@ -2,30 +2,63 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Opérations sur matrices</title>
+
+  <title>Calculateur de déterminant</title>
   <link rel="stylesheet" href="/css/styles.css">
   <script src='/js/script.js'></script>
-</head>
 
+  <style>
+   
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 350px;
+    }
+
+    .matrix {
+      display: grid;
+      gap: 5px;
+      justify-content: center;
+      margin: 15px 0;
+    }
+
+    
+    select, button {
+      margin-top: 10px;
+      padding: 6px;
+      font-size: 14px;
+    }
+
+    
+    #det {
+      font-weight: bold;
+      margin-top: 15px;
+    }
+  </style>
+</head>
 
 <body>
 
-<h2>Calcul du déterminant d’une matrice carrée</h2>
+<div class="container">
+  <h2>Calculateur de déterminant</h2>
+
+  <label for="size">Taille de la matrice :</label>
+  <select id="size" onchange="genererMatrice()">
+    <option value="2">2 × 2</option>
+    <option value="3" selected>3 × 3</option>
+    <option value="4">4 × 4</option>
+  </select>
+
+  <div id="matrix" class="matrix"></div>
+
+  <button onclick="calculerDeterminant()">Calculer</button>
+  <button onclick="resetMatrice()">Remise à zéro</button>
 
 
-<label>
-    Dimension \( n \) :
-    <input type="number" id="dimension" min="1" value="2">
-</label>
-<button onclick="creerMatrice()">Créer la matrice</button>
-
-<div id="matrice"></div>
-
-<button onclick="calculerDeterminant()">Calculer le déterminant</button>
-
-<div id="resultat"></div>
-
-
+  <div id="det"></div>
+</div>
 
 </body>
 </html>

@@ -1,13 +1,13 @@
 /* Place your CSS styles in this file */
 body {
-      font-family: Arial, sans-serif;
+      font-family: 'Courier New', Courier, monospace, sans-serif;
       margin: 30px;
       background-color: rgb(223, 223, 239);
     }
 
 h1 {
     text-align:center;
-    font-family: "palatino";
+    font-family: "courrier new";
     font-weight: bold;
     color: rgb(25, 82, 227)
     }
@@ -18,6 +18,33 @@ h2 {
     color: rgb(22, 18, 228)
     }   
 
+/*style de boutons, textes et labels*/
+
+  input {
+            width: 200px;
+            text-align: left;
+            padding: 10px;
+            font-size: 20px; 
+            font-family: 'courier new', sans-serif;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+        }
+  button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 20px;
+            font-family: 'courier new', sans-serif;
+            background-color: rgb(100, 150, 250);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+  label {
+            font-size: 25px;
+            font-family: 'courier new', sans-serif;
+            font-weight: bold;
+        }
 /* Navbar container */
 .navbar {
     overflow: hidden;
@@ -90,18 +117,7 @@ h2 {
     display: block;
   }
 
-  /*style de boutons*/
-
-  input {
-            width: 60px;
-            text-align: center;
-        }
-  button {
-            margin-top: 10px;
-            padding: 5px 10px;
-            font-size: 16px;
-        }
-
+ 
   #resultat {
             margin-top: 20px;
             background: white;
